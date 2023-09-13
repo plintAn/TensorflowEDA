@@ -10,7 +10,53 @@
 
 데이터셋 출처 URL:https://www.kaggle.com/datasets/bharath011/heart-disease-classification-dataset
 
-# 데이터 임포트
+<div id="import">
+
+## 텐서 플로를 활용한 심장병 EDA
+
+이번 텐서 플로를 이용한 모델링 및 최적화 적용 분석을 통해 많은 것을 배울 수 있었고, 이를 활용할 수 있는 수많은 사례에 대한 궁금증이 생겼다. 그리고 코드를 작성하며 부족했던 점이 많았는데 이는 다음과 같다.
+
+### 배울 수 있었던 점:
+
+* 기본적인 모델링: 텐서플로를 사용하여 딥러닝 모델을 어떻게 구축하는지에 대한 기본적인 이해를 얻었다.
+* 특성 공학: 데이터의 특성을 잘 이해하고 이를 모델에 어떻게 적용하는지 배웠다.
+* 최적화 전략: 다양한 최적화 전략과 방법들을 사용하며, 모델의 성능을 향상시키기 위한 방법을 학습하였다.
+* 콜백의 활용: 텐서플로의 콜백 기능을 활용하여 모델 학습 과정 중 원하는 작업을 자동화하고, 모델의 학습 상태를 더욱 효과적으로 모니터링할 수 있었다.
+
+### 활용 가능한 점:
+
+* 다양한 문제 해결: 배운 기술을 다양한 딥러닝 문제에 적용할 수 있다.
+* 빠른 프로토타이핑: 텐서플로의 간편한 API를 활용하여 빠르게 모델 프로토타입을 구축하고 테스트할 수 있다.
+* 커스텀 모델 및 층 구축: 텐서플로의 유연성을 활용하여 사용자 정의 모델 및 층을 만들 수 있다.
+* 전이 학습: 이미 학습된 모델을 활용하여 새로운 문제를 더 빠르게 해결할 수 있다.
+
+### 부족했던 부분:
+
+* 고급 최적화 기법: 몇몇 고급 최적화 전략이나 기법들에 대해 아직까지 깊이 있게 다루지 못했다.
+* 과적합 대응: 모델이 과적합될 가능성이 있으며, 이를 해결하기 위한 다양한 전략들에 대한 심도 있는 이해가 필요하다.
+* 모델 해석: 모델이 왜 그런 예측을 하는지에 대한 해석능력을 더 발전시켜야 한다.
+
+# 목차
+
+| 번호 | 내용                                             |
+|------|--------------------------------------------------|
+| 1  | [라이브러리 임포트](#import)                             |
+| 2  | [데이터 로드](#load)                                   |
+| 3  | [데이터 확인](#check)                   |
+| 4  | [데이터 준비](#prepare)       |
+|     | [데이터 표준화](#scaling)       |
+|     | [성능 향상을 위한 기능 엔지니어링 및 분할](#engineering)       |
+| 5  | [모델 학습 준비](#para)                           |
+|     | [유틸리티 함수로 모델 구축](#utility)                   |
+|     | [유틸리티 함수: 곡선 플로팅](#utility-plot)                   |
+|     | [Baseline Model 설정](#Baseline)                           |
+|     | [최적화 모델](#opt)                |
+|     | [최적화 모델 추출](#opt-extract)                       |
+|     | [모델 최적화 적용 후 그래프 ](#opt-extract-active)          |
+       
+# 1.라이브러리 임포트
+
+</div>
 
 ```python
 # 표준 라이브러리
@@ -37,17 +83,21 @@ from sklearn.preprocessing import LabelEncoder # LabelEncoder는 레이블을 �
 from sklearn.model_selection import train_test_split 
 #train_test_split은 데이터를 학습 세트와 테스트 세트로 분할
 ```
+<div id="load">
+       
+# 2.데이터 로드
 
-# 데이터 로드
+</div>
+
 
 ```python
 # 데이터를 불러옵니다.
 CSV_PATH = './Heart_Attack.csv'
 df = pd.read_csv(CSV_PATH)
 ```
-
-# 데이터 확인
-
+<div id="check">
+# 3.데이터 확인
+</div>
 ```python
 df.head()
 df.columns
@@ -89,16 +139,19 @@ class
 0    509
 Name: count, dtype: int64
 ```
-
+<div id="prepare">
 # 데이터 준비
-
+</div>
 맥박, 즉 심박수 'impluse' 에 대한 오타가 존재하니 이를 rename 합니다.
 
 ```python
 df = df.rename(columns={'impluse': 'impulse'})
 ```
+<div id="scaling">
 
 ## 데이터 표준화
+
+</div>
 
 ```python
 
@@ -116,8 +169,11 @@ age	gender	impulse	pressurehight	pressurelow	glucose	kcm	troponin	class
 3	64	1	70	120	55	270.0	13.87	0.122	1
 4	55	1	64	112	65	300.0	1.08	0.003	0
 ```
-
+<div id="engineering">
+       
 ## 성능 향상을 위한 기능 엔지니어링 및 분할
+
+</div>
 
 * 학습 세트와 테스트 세트로 데이터 분리
 
@@ -143,11 +199,14 @@ Training Records = 1055 ; Validation Record 264
 Output
 
 훈련 세트 1055, 테스트 세트 264 
-```python
 
-```
+<div id="para">
 
+# 모델 학습 준비
+       
 ## 매개변수 & 기능
+
+</div>
 
 텐서 플로 활용을 위한 매개변수 지정
 
@@ -172,7 +231,12 @@ EPOCHS = 150
 # 실험 횟수
 TRIALS = 25
 ```
+
+<div id="utility">
+
 ## 유틸리티 함수로 모델 구축
+
+</div>
 
 
 ```python
@@ -195,7 +259,11 @@ def build_model(batch_size=None, nodes=None, input_shape=None, output_shape=None
     return model
 ```
 
+<div id="utility-plot">
+
 ## 유틸리티 함수: 곡선 플로팅
+
+</div>
 
 ```python
 # 유틸리티 함수: 곡선 플로팅
@@ -225,6 +293,7 @@ def plot_curves(hist):
 
 Output description
 
+
 * build_model() 함수는 모델을 구축하는 함수
 * plot_curves() 함수는 곡선을 플로팅하는 함수
 * batch_size 매개변수는 배치 크기를 지정
@@ -232,8 +301,12 @@ Output description
 * input_shape 매개변수는 입력층의 크기를 지정
 * output_shape 매개변수는 출력층의 크기를 지정
 * hist 매개변수는 모델의 훈련 이력을 지정
-
+* 
+<div id="Baseline">
+       
 ## Baseline Model 설정
+
+</div>
 
 비교 기준을 위한 모델의 기본 성능 설정
 
@@ -310,8 +383,11 @@ Output
 150/150 [00:07<00:00, 23.10epoch/s, loss=0.643, accuracy=0.625, val_loss=1.5, val_accuracy=0.58]
 ```
 
+<div id="opt">
 
 ## 최적화 모델
+
+</div>
 
 
 ```python
@@ -453,7 +529,11 @@ Best Params:
 {'n_layers': 1, 'n_nodes': 54, 'learning_rate': 0.005951303078196145}
 ```
 
+<div id="opt-extract">
+
 ## 최적화 모델 추출
+
+</div>
 
 ```python
 # 최적화 모델 추출
@@ -500,7 +580,11 @@ baseline_hist_opt = baseline_model_opt.fit(x_train
 plot_curves(baseline_hist_opt)
 ```
 
-모델 최적화 적용 후 그래프 
+<div id="opt-extract-active">
+
+## 모델 최적화 적용 후 그래프 
+
+</div>
 
 Output
 
@@ -512,7 +596,8 @@ Output
 
 최적화 모델 적용 전과 후의 비교
 
-![image](https://github.com/plintAn/TensorflowEDA/assets/124107186/b16ff876-000b-4716-87ba-ac5fc65954d7)
+![image](https://github.com/plintAn/TensorflowEDA/assets/124107186/462a61ae-dca7-4011-9a5a-33e62a57aefb)
+
 
 
 
